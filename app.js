@@ -1,21 +1,36 @@
-const express = require('express');
-const path = require('path');
-const indexRouter = require('./routes/index');
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
-const PORT = 3000;
 
-// Serve static files from the "public" directory
-app.use(express.static(path.join(__dirname, 'public')));
+// Needed for ES modules to resolve paths
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Use the router for handling routes
-app.use('/', indexRouter);
+// Middleware
+app.use(express.json());
 
-// Catch-all route for handling 404 errors
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-  });
+// ✅ Health check (browser-safe)
+app.get("/api/health", (req, res) => {
+  res.json({
+      status: "vibey alive",
+          uptime: process.uptime(),
+              timestamp: Date.now()
+                });
+                });
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}/`);
-});
+                // Serve static frontend
+                app.use(express.static(path.join(__dirname, "public")));
+
+                // Fallback to index.html for root
+                app.get("/", (req, res) => {
+                  res.sendFile(path.join(__dirname, "public", "index.html"));
+                  });
+
+                  // Railway / local port handling
+                  const PORT = process.env.PORT || 3000;
+
+                  app.listen(PORT, () => {
+                    console.log(`Server running on port ${PORT}`);
+                    });
