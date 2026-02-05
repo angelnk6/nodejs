@@ -1,7 +1,7 @@
 {
     "name": "railway-backend",
       "version": "1.0.0",
-        "description": "Minimal Railway Node server",
+        "private": true,
           "main": "index.js",
             "scripts": {
                 "start": "node index.js"
@@ -13,4 +13,3 @@
                                 "express": "^4.19.2"
                                   }
                                   }
-}
