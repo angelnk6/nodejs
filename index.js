@@ -1,5 +1,4 @@
 const express = require("express");
-const fetch = require("node-fetch");
 
 const app = express();
 app.use(express.json());
@@ -24,23 +23,21 @@ app.get("/", (req, res) => {
                                                                 Authorization: `Bearer ${process.env.HF_API_KEY}`,
                                                                           "Content-Type": "application/json",
                                                                                   },
-                                                                                          body: JSON.stringify({
-                                                                                                    inputs: prompt,
-                                                                                                            }),
-                                                                                                                  }
-                                                                                                                      );
+                                                                                          body: JSON.stringify({ inputs: prompt }),
+                                                                                                }
+                                                                                                    );
 
-                                                                                                                          const data = await response.json();
+                                                                                                        const data = await response.json();
 
-                                                                                                                              res.json({
-                                                                                                                                    output: data[0]?.generated_text || data,
-                                                                                                                                        });
-                                                                                                                                          } catch (err) {
-                                                                                                                                              res.status(500).json({ error: err.message });
-                                                                                                                                                }
-                                                                                                                                                });
+                                                                                                            res.json({
+                                                                                                                  output: data[0]?.generated_text || data,
+                                                                                                                      });
+                                                                                                                        } catch (err) {
+                                                                                                                            res.status(500).json({ error: err.message });
+                                                                                                                              }
+                                                                                                                              });
 
-                                                                                                                                                const PORT = process.env.PORT || 8080;
-                                                                                                                                                app.listen(PORT, "0.0.0.0", () => {
-                                                                                                                                                  console.log(`Vibey listening on ${PORT}`);
-                                                                                                                                                  });
+                                                                                                                              const PORT = process.env.PORT || 8080;
+                                                                                                                              app.listen(PORT, "0.0.0.0", () => {
+                                                                                                                                console.log(`Vibey listening on ${PORT}`);
+                                                                                                                                });
