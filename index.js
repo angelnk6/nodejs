@@ -1,35 +1,46 @@
 const express = require("express");
-const path = require("path");
+const fetch = require("node-fetch");
 
 const app = express();
-
-// Railway provides PORT automatically
-const PORT = process.env.PORT || 8080;
-
-// Basic middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Root check (what you're already seeing)
 app.get("/", (req, res) => {
-  res.send("backend alive");
+  res.send("Vibey backend alive ✨");
   });
 
-  // Health check endpoint (kept from old file)
-  app.get("/_api/health", (req, res) => {
-    res.json({
-        status: "alive",
-            uptime: process.uptime(),
-                timestamp: new Date().toISOString()
-                  });
-                  });
+  app.post("/ai", async (req, res) => {
+    try {
+        const { prompt } = req.body;
 
-                  // Example placeholder API route (safe, does nothing harmful)
-                  app.get("/_api/ping", (req, res) => {
-                    res.json({ pong: true });
-                    });
+            if (!prompt) {
+                  return res.status(400).json({ error: "Missing prompt" });
+                      }
 
-                    // Start server — MUST listen on 0.0.0.0 for Railway
-                    app.listen(PORT, "0.0.0.0", () => {
-                      console.log(`Server running on port ${PORT}`);
-                      });
+                          const response = await fetch(
+                                "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
+                                      {
+                                              method: "POST",
+                                                      headers: {
+                                                                Authorization: `Bearer ${process.env.HF_API_KEY}`,
+                                                                          "Content-Type": "application/json",
+                                                                                  },
+                                                                                          body: JSON.stringify({
+                                                                                                    inputs: prompt,
+                                                                                                            }),
+                                                                                                                  }
+                                                                                                                      );
+
+                                                                                                                          const data = await response.json();
+
+                                                                                                                              res.json({
+                                                                                                                                    output: data[0]?.generated_text || data,
+                                                                                                                                        });
+                                                                                                                                          } catch (err) {
+                                                                                                                                              res.status(500).json({ error: err.message });
+                                                                                                                                                }
+                                                                                                                                                });
+
+                                                                                                                                                const PORT = process.env.PORT || 8080;
+                                                                                                                                                app.listen(PORT, "0.0.0.0", () => {
+                                                                                                                                                  console.log(`Vibey listening on ${PORT}`);
+                                                                                                                                                  });
