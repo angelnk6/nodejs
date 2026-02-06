@@ -1,5 +1,4 @@
 const express = require("express");
-const fetch = require("node-fetch");
 
 const app = express();
 app.use(express.json());
@@ -19,12 +18,12 @@ const PORT = process.env.PORT || 8080;
               app.get("/ai", (req, res) => {
                 res.json({
                     status: "ok",
-                        message: "AI route is live. Use POST to talk to the model."
+                        message: "AI route is live. Use POST to talk to Vibey."
                           });
                           });
 
                           /* =========
-                             AI ROUTE
+                             AI ROUTE (FREE)
                                 ========= */
                                 app.post("/ai", async (req, res) => {
                                   try {
