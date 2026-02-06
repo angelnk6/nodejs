@@ -1,5 +1,5 @@
-import express from "express";
-import fetch from "node-fetch";
+const express = require("express");
+const fetch = require("node-fetch");
 
 const app = express();
 app.use(express.json());
@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8080;
         });
 
         /* =========
-           BROWSER TEST (GET)
+           BROWSER TEST
               ========= */
               app.get("/ai", (req, res) => {
                 res.json({
@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 8080;
                           });
 
                           /* =========
-                             AI ROUTE (POST)
+                             AI ROUTE
                                 ========= */
                                 app.post("/ai", async (req, res) => {
                                   try {
@@ -35,29 +35,27 @@ const PORT = process.env.PORT || 8080;
                                                       {
                                                               method: "POST",
                                                                       headers: {
-                                                                                "Authorization": `Bearer ${process.env.HF_API_KEY}`,
+                                                                                Authorization: `Bearer ${process.env.HF_API_KEY}`,
                                                                                           "Content-Type": "application/json"
                                                                                                   },
-                                                                                                          body: JSON.stringify({
-                                                                                                                    inputs: prompt
-                                                                                                                            })
-                                                                                                                                  }
-                                                                                                                                      );
+                                                                                                          body: JSON.stringify({ inputs: prompt })
+                                                                                                                }
+                                                                                                                    );
 
-                                                                                                                                          const data = await response.json();
+                                                                                                                        const data = await response.json();
 
-                                                                                                                                              res.json({
-                                                                                                                                                    output: data?.[0]?.generated_text || data
-                                                                                                                                                        });
-                                                                                                                                                          } catch (err) {
-                                                                                                                                                              console.error(err);
-                                                                                                                                                                  res.status(500).json({ error: "AI request failed" });
-                                                                                                                                                                    }
-                                                                                                                                                                    });
+                                                                                                                            res.json({
+                                                                                                                                  output: data?.[0]?.generated_text || data
+                                                                                                                                      });
+                                                                                                                                        } catch (err) {
+                                                                                                                                            console.error(err);
+                                                                                                                                                res.status(500).json({ error: "AI request failed" });
+                                                                                                                                                  }
+                                                                                                                                                  });
 
-                                                                                                                                                                    /* =========
-                                                                                                                                                                       START SERVER
-                                                                                                                                                                          ========= */
-                                                                                                                                                                          app.listen(PORT, () => {
-                                                                                                                                                                            console.log(`Vibey listening on ${PORT}`);
-                                                                                                                                                                            });
+                                                                                                                                                  /* =========
+                                                                                                                                                     START SERVER
+                                                                                                                                                        ========= */
+                                                                                                                                                        app.listen(PORT, () => {
+                                                                                                                                                          console.log(`Vibey listening on ${PORT}`);
+                                                                                                                                                          });
